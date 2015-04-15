@@ -284,10 +284,53 @@ float taylor_exp_double_lookup(float n)
 	
 	//n is between 0 and 1/16
 
-	return exps_0_15[fn] * exps_0_1[fn2] * (1 + n);	
+	return exps_0_15[fn] * exps_0_1[fn2] * taylor_exp_silly<2>(n);
 
 }
 
+
+
+
+////////////////////////////////////////////////////////////////////////////////
+//
+// EVAN MOAR TABLES!11!11!
+//
+
+
+float exp_taylor_3(float n)
+{
+	if( n <= -16)
+		return 0;
+	
+	int fn = -ceil(n*64);
+	n += fn *1.f/64;
+
+	return exps_0_16_1024[fn] * taylor_exp_silly<3>(n);
+}
+
+
+float exp_taylor_4(float n)
+{
+	if( n <= -16)
+		return 0;
+	
+	int fn = -ceil(n*256);
+	n += fn *1.f/256;
+
+	return exps_0_16_4096[fn] * taylor_exp_silly<3>(n);
+}
+
+
+float exp_taylor_4a(float n)
+{
+	if( n <= -16)
+		return 0;
+	
+	int fn = -ceil(n*256);
+	n += fn *1.f/256;
+
+	return exps_0_16_4096[fn] * taylor_exp_silly<0>(n);
+}
 
 
 
@@ -380,6 +423,9 @@ void time_function()
 	test_func(exp_taylor_1, "exp_taylor_1", rng);
 	test_func(exp_taylor_1_silly, "exp_taylor_1_silly", rng);
 	test_func(exp_taylor_2, "exp_taylor_2", rng);
+	test_func(exp_taylor_3, "exp_taylor_3", rng);
+	test_func(exp_taylor_4, "exp_taylor_4", rng);
+	test_func(exp_taylor_4a, "exp_taylor_4a", rng);
 	test_func(exp_rational_1, "exp_rational_1", rng);
 	test_func(exp_rational_2, "exp_rational_2", rng);
 	test_func(taylor_exp_double_lookup, "taylor_exp_double_lookup", rng);
